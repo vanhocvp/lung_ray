@@ -1,0 +1,28 @@
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Document</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" type="text/css" rel="stylesheet">
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.2/socket.io.js" integrity="sha512-iZIBSs+gDyTH0ZhUem9eQ1t4DcEn2B9lHxfRMeGQhyNdSUz+rb+5A3ummX6DQTOIs1XK0gOteOg/LPtSo9VJ+w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script type="text/javascript" charset="utf-8">
+        var socket;
+        $(document).ready(function() {
+            socket = io.connect('http://' + document.domain + ':' + location.port + '/');
+
+            // client get data from server
+            socket.on('connect', function() {
+                socket.emit('slider_2');
+            });
+            socket.on('slider_2', function(data) {
+                if (data.path == "/static/images/test2.png"){
+                    alert("vlin")
+                }
+                $('#text').attr('vanhocvp')
+                $('#img').attr('src', data.path)
+            });
+        });
+    </script>
+<p id = 'text'> </p>
+<img src = '' height="256" width="256" id = 'img' class = 'img'>

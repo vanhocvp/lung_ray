@@ -1,0 +1,180 @@
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="/static/process.css">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.2/socket.io.js" integrity="sha512-iZIBSs+gDyTH0ZhUem9eQ1t4DcEn2B9lHxfRMeGQhyNdSUz+rb+5A3ummX6DQTOIs1XK0gOteOg/LPtSo9VJ+w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" type="text/css" rel="stylesheet">
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script type='text/javascript'>
+        var socket;
+
+        $(document).ready(function(){
+            $(function(){
+                var form = $('form');
+                socket = io.connect('http://' + document.domain + ':' + location.port + '/dip/process');
+
+                // client get data from server
+                socket.on('connect', function() {
+                    socket.emit('raw_img');
+                    socket.emit('slider_1');
+                    socket.emit('slider_2');
+                });
+                socket.on('raw_img', function(data){
+                    $('#img_1').attr('src', data.path)
+                });
+                socket.on('slider_1', function(data) {
+                    $('#img_2').attr('src', data.path)
+                });
+                socket.on('slider_2', function(data) {
+                    $('#img_3').attr('src', data.path)
+                });
+                $('#checkbox_1').change(function(){
+                    var checkBox_1 = document.getElementById("checkbox_1");
+                    if (checkBox_1.checked == true){
+                        $('#checkbox_2').prop('checked', false)
+                        $('#checkbox_3').prop('checked', false)
+                        $('#checkbox_4').prop('checked', false)
+                    }
+                });
+                $('#checkbox_2').change(function(){
+                    var checkBox_2 = document.getElementById("checkbox_2");          
+                    if (checkBox_2.checked == true){
+                        $('#checkbox_1').prop('checked', false)
+                        $('#checkbox_3').prop('checked', false)
+                        $('#checkbox_4').prop('checked', false)
+                    }     
+                });
+                $('#checkbox_3').change(function(){
+                    var checkBox_3 = document.getElementById("checkbox_3");          
+                    if (checkBox_3.checked == true){
+                        $('#checkbox_1').prop('checked', false)
+                        $('#checkbox_2').prop('checked', false)
+                        $('#checkbox_4').prop('checked', false)
+                    }     
+                });
+                $('#checkbox_4').change(function(){
+                    var checkBox_4 = document.getElementById("checkbox_4");          
+                    if (checkBox_4.checked == true){
+                        $('#checkbox_1').prop('checked', false)
+                        $('#checkbox_2').prop('checked', false)
+                        $('#checkbox_3').prop('checked', false)
+                    }     
+                });
+                $('#btn_1').click(function(data){
+                    $.ajax({
+                        type: "POST",
+                        url: "/predict",
+                        data: 'btn_1'
+                    }).done(function(res){
+                        //do something with the response from the server
+                        socket.emit('predict_1');
+                        socket.on('predict_1', function(data) {
+                            $('#img_mask_1').attr('src', data.path_mask)
+                            $('#img_segment_1').attr('src', data.path_segment)
+                        });
+                    });
+                });
+                $('#btn_2').click(function(data){
+                    $.ajax({
+                        type: "POST",
+                        url: "/predict",
+                        data: 'btn_2'
+                    }).done(function(res){
+                        //do something with the response from the server
+                        socket.emit('predict_2');
+                        socket.on('predict_2', function(data) {
+                            $('#img_mask_2').attr('src', data.path_mask)
+                            $('#img_segment_2').attr('src', data.path_segment)
+                        });
+                    });
+                });
+                $('#btn_3').click(function(data){
+                    $.ajax({
+                        type: "POST",
+                        url: "/predict",
+                        data: 'btn_3'
+                    }).done(function(res){
+                        //do something with the response from the server
+                        socket.emit('predict_3');
+                        socket.on('predict_3', function(data) {
+                            $('#img_mask_3').attr('src', data.path_mask)
+                            $('#img_segment_3').attr('src', data.path_segment)
+                        });
+                    });
+                });
+                $('#slider_1').on('change mouseup', function(){
+                    $.ajax({
+                        type: "POST",
+                        url: form.action,
+                        data: form.serialize(),
+                    }).done(function(res){
+                        //do something with the response from the server
+                        socket.emit('slider_1');
+                        socket.on('slider_1', function(data) {
+                            $('#img_2').attr('src', data.path)
+                        });
+                    });
+                });
+				$('#slider_2').on('change mouseup', function(){
+                    $.ajax({
+                        type: "POST",
+                        url: form.action,
+                        data: form.serialize(),
+                    }).done(function(res){
+                        //do something with the response from the server
+                    
+                        socket.emit('slider_2');
+                        socket.on('slider_2', function(data) {
+                            $('#img_3').attr('src', data.path)
+                        });
+                 
+                    });
+                });
+            });
+        });
+        </script>
+    <div class = dip>
+		<img src= "" height="256" width="256" id = 'img_1' class = 'img_1'>
+		<br><br>
+		<img src= "" height="256" width="256" id = 'img_2' class = 'img_2'>
+		<br><br>
+		<img src= "" height="256" width="256" id = 'img_3' class = 'img_3'>
+		<br>
+	</div>
+    <div class = mask>
+		<img src= "" height="256" width="256" id = 'img_mask_1' class = 'img_1'>
+		<br><br>
+		<img src= "" height="256" width="256" id = 'img_mask_2' class = 'img_2'>
+		<br><br>
+		<img src= "" height="256" width="256" id = 'img_mask_3' class = 'img_3'>
+		<br>
+	</div>
+    <div class = segment>
+		<img src= "" height="256" width="256" id = 'img_segment_1' class = 'img_1'>
+		<br><br>
+		<img src= "" height="256" width="256" id = 'img_segment_2' class = 'img_2'>
+		<br><br>
+		<img src= "" height="256" width="256" id = 'img_segment_3' class = 'img_3'>
+		<br>
+	</div>
+	<form method = "POST">
+        <div class = checkbox>
+            <br>
+            <input type='checkbox' name = 'checkbox' id = 'checkbox_1' value="1" checked> Gaussian
+            <input type='checkbox' name = 'checkbox' id = 'checkbox_2' value="2"> Median
+            <input type='checkbox' name = 'checkbox' id = 'checkbox_3' value="3"> Maximum
+            <input type='checkbox' name = 'checkbox' id = 'checkbox_4' value="4"> Minimum   
+            <br>
+        </div>
+        
+        <input type="range" min="1" max="15" value="5" id = "slider_1" name = "slider_1" class = "slider_1">
+
+        <p class = um>Unsharp Masking</p>
+        <p class = hef >High Frequency Emphasis</p>  
+		<input type="range" min="1" max="90" value="50" id = "slider_2" name = "slider_2" class = "slider_2">
+        <input type = "button" value="Predict" class = "btn_1" id = "btn_1" name = "btn_1"> 
+        <input type = "button" value="Predict" class = "btn_2" id = "btn_2" name = "btn_2"> 
+        <input type = "button" value="Predict" class = "btn_3" id = "btn_3" name = "btn_3"> 
+    </form>

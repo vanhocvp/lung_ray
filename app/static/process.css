@@ -1,0 +1,63 @@
+input.slider_1{
+    position: absolute;
+    left: 250px;
+    top: 525px;
+}
+
+input.slider_2{
+    position: absolute;
+    left: 250px;
+    top: 750px;
+}
+div.checkbox{
+    position: absolute;
+    left: 40px;
+    top: 470px;
+}
+h1 {
+    position: absolute;
+    left: 300px;
+    top: 300px;
+}
+
+div.dip{
+    position: absolute;
+    left: 400px;
+    top: 80
+}
+div.mask{
+    position: absolute;
+    left: 850px;
+    top: 80
+}
+div.segment{
+    position: absolute;
+    left: 1130px;
+    top: 80
+}
+
+input.btn_1{
+    position: absolute;
+    left: 700px;
+    top: 200px;
+}
+input.btn_2{
+    position: absolute;
+    left: 700px;
+    top: 450px;
+}
+input.btn_3{
+    position: absolute;
+    left: 700px;
+    top: 750px;
+}
+p.hef{
+    position: absolute;
+    left: 190px;
+    top: 700px;
+}
+p.um{
+    position: absolute;
+    left: 250px;
+    top: 440px;
+}
